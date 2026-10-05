@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sp_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/homePanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            style="@style/SPHeading"
+            android:text="Gather"
+            android:textSize="32sp" />
+
+        <TextView
+            style="@style/SPBody"
+            android:layout_marginTop="6dp"
+            android:text="Find a place. Make a plan." />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/newButton"
+            style="@style/SPPrimaryButton"
+            android:layout_marginTop="24dp"
+            android:text="@string/hp_new_hangout" />
+
+        <TextView
+            style="@style/SPHeading"
+            android:layout_marginTop="24dp"
+            android:text="@string/sp_saved_plans"
+            android:textSize="21sp" />
+
+        <TextView
+            android:id="@+id/statusText"
+            style="@style/SPBody"
+            android:layout_marginTop="8dp"
+            android:accessibilityLiveRegion="polite"
+            android:text="@string/hp_loading" />
+
+        <ListView
+            android:id="@+id/hangoutList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="16dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="12dp"
+            android:listSelector="@android:color/transparent" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/formPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/formHeading"
+                style="@style/SPHeading"
+                android:text="@string/hp_new_hangout" />
+
+            <TextView
+                style="@style/SPBody"
+                android:layout_marginTop="8dp"
+                android:text="Name your plan and find places to go." />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/sp_card"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    style="@style/SPLabel"
+                    android:layout_marginTop="0dp"
+                    android:labelFor="@id/titleInput"
+                    android:text="Hangout name *" />
+
+                <EditText
+                    android:id="@+id/titleInput"
+                    style="@style/SPInput"
+                    android:hint="Saturday with friends"
+                    android:inputType="textCapSentences"
+                    android:maxLength="100"
+                    android:maxLines="1" />
+
+                <TextView
+                    style="@style/SPLabel"
+                    android:labelFor="@id/cityInput"
+                    android:text="Area or address (optional)" />
+
+                <EditText
+                    android:id="@+id/cityInput"
+                    style="@style/SPInput"
+                    android:hint="Leave blank to use your location"
+                    android:inputType="textPostalAddress"
+                    android:maxLength="200"
+                    android:maxLines="2" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/findPlacesButton"
+                    style="@style/SPPrimaryButton"
+                    android:layout_marginTop="12dp"
+                    android:text="Find a place" />
+
+                <TextView
+                    android:id="@+id/selectedPlacesStatus"
+                    style="@style/SPBody"
+                    android:layout_marginTop="12dp"
+                    android:accessibilityLiveRegion="polite"
+                    android:text="No places selected yet." />
+
+                <LinearLayout
+                    android:id="@+id/selectedPlacesContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <TextView
+                    style="@style/SPLabel"
+                    android:labelFor="@id/whenInput"
+                    android:text="@string/hp_when_label" />
+
+                <EditText
+                    android:id="@+id/whenInput"
+                    style="@style/SPInput"
+                    android:hint="@string/hp_when_hint"
+                    android:inputType="textCapSentences"
+                    android:maxLength="100"
+                    android:maxLines="1" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/chooseTimeButton"
+                    style="@style/SPSecondaryButton"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/sp_choose_time" />
+
+                <TextView
+                    style="@style/SPLabel"
+                    android:labelFor="@id/notesInput"
+                    android:text="@string/hp_notes_label" />
+
+                <EditText
+                    android:id="@+id/notesInput"
+                    style="@style/SPInput"
+                    android:gravity="top"
+                    android:hint="@string/hp_notes_hint"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLength="2000"
+                    android:minLines="3" />
+
+                <TextView
+                    style="@style/SPBody"
+                    android:layout_marginTop="16dp"
+                    android:autoLink="web"
+                    android:linksClickable="true"
+                    android:textSize="12sp"
+                    android:text="Powered by Geoapify: https://www.geoapify.com\n© OpenStreetMap contributors: https://www.openstreetmap.org/copyright" />
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/saveButton"
+                style="@style/SPPrimaryButton"
+                android:layout_marginTop="20dp"
+                android:text="Save hangout and places" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancelButton"
+                style="@style/SPSecondaryButton"
+                android:text="@string/hp_cancel" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

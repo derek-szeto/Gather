@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/sp_card">
+
+    <TextView
+        android:id="@+id/placeName"
+        style="@style/SPHeading"
+        android:layout_marginTop="0dp"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/placeMetadata"
+        style="@style/SPBody"
+        android:layout_marginTop="6dp"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/placeAddress"
+        style="@style/SPBody"
+        android:layout_marginTop="10dp"
+        android:textSize="15sp"
+        android:lineSpacingExtra="3dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/selectPlaceButton"
+        style="@style/SPPrimaryButton"
+        android:layout_marginTop="12dp"
+        android:minHeight="48dp"
+        android:textAllCaps="false"
+        android:text="Select this place" />
+
+</LinearLayout>

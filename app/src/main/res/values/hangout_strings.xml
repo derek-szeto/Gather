@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hp_title">SimplePlans</string>
+    <string name="hp_subtitle">Make plans. Get together.</string>
+
+    <string name="hp_new_hangout">New hangout</string>
+    <string name="hp_edit_hangout">Edit hangout</string>
+
+    <string name="hp_loading">Loading your plans…</string>
+    <string name="hp_empty">No hangouts yet. Create your first plan!</string>
+    <string name="hp_tap_plan">Tap a plan to view, edit, or delete it.</string>
+
+    <string name="hp_title_label">Hangout name *</string>
+    <string name="hp_title_hint">Saturday with friends</string>
+
+    <string name="hp_city_label">City or area *</string>
+    <string name="hp_city_hint">Chicago</string>
+
+    <string name="hp_when_label">Date and time (optional)</string>
+    <string name="hp_when_hint">October 3, 2026 at 1:00 PM</string>
+
+    <string name="hp_notes_label">Notes (optional)</string>
+    <string name="hp_notes_hint">Ideas, meeting details, or things to bring</string>
+
+    <string name="hp_form_help">Start with a name and city. Add your schedule and notes below.</string>
+
+    <string name="hp_save">Save hangout</string>
+    <string name="hp_cancel">Cancel</string>
+    <string name="hp_edit">Edit</string>
+    <string name="hp_delete">Delete</string>
+    <string name="hp_close">Close</string>
+
+    <string name="hp_required">Please fill in this field</string>
+    <string name="hp_saved">Hangout saved</string>
+    <string name="hp_unscheduled">Time to be decided</string>
+
+    <string name="hp_plan_details">%1$s\n%2$s\n\n%3$s</string>
+    <string name="hp_delete_question">Delete this hangout?</string>
+
+    <string name="hp_database_error">Could not finish the database operation. Please try again.</string>
+</resources>

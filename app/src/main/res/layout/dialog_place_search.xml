@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            style="@style/SPLabel"
+            android:layout_marginTop="0dp"
+            android:labelFor="@id/searchCategoryInput"
+            android:text="What are you looking for?" />
+
+        <AutoCompleteTextView
+            android:id="@+id/searchCategoryInput"
+            style="@style/SPInput"
+            android:completionThreshold="1"
+            android:hint="Burgers, parks, coffee, a business name…"
+            android:inputType="textCapSentences"
+            android:maxLength="100"
+            android:singleLine="true"
+            android:imeOptions="actionNext" />
+
+        <TextView
+            android:id="@+id/searchInterpretation"
+            style="@style/SPBody"
+            android:layout_marginTop="8dp"
+            android:textSize="13sp" />
+
+        <TextView
+            style="@style/SPLabel"
+            android:layout_marginTop="24dp"
+            android:labelFor="@id/searchLocationInput"
+            android:text="Search near" />
+
+        <EditText
+            android:id="@+id/searchLocationInput"
+            style="@style/SPInput"
+            android:hint="U.S. address, city, or ZIP code"
+            android:inputType="textPostalAddress"
+            android:maxLength="200"
+            android:singleLine="true"
+            android:imeOptions="actionDone" />
+
+        <TextView
+            style="@style/SPBody"
+            android:layout_marginTop="6dp"
+            android:textSize="13sp"
+            android:text="Type at least 3 characters for address suggestions. Choose one to set the search area." />
+
+        <LinearLayout
+            android:id="@+id/addressSuggestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <TextView
+            style="@style/SPLabel"
+            android:labelFor="@id/searchRadiusSpinner"
+            android:text="Search radius" />
+
+        <Spinner
+            android:id="@+id/searchRadiusSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:spinnerMode="dropdown" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/searchAreaButton"
+            style="@style/SPPrimaryButton"
+            android:layout_marginTop="16dp"
+            android:minHeight="48dp"
+            android:textAllCaps="false"
+            android:text="Search this area" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/useDeviceLocationButton"
+            style="@style/SPSecondaryButton"
+            android:minHeight="48dp"
+            android:textAllCaps="false"
+            android:text="Use my location instead" />
+
+        <TextView
+            style="@style/SPBody"
+            android:layout_marginTop="8dp"
+            android:textSize="12sp"
+            android:text="Use my location ignores the address above and sends your device coordinates to Geoapify. Address text is sent while fetching suggestions. Searches currently cover U.S. places." />
+
+    </LinearLayout>
+
+</ScrollView>

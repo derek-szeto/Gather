@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/resultsSummary"
+        style="@style/SPBody"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:textSize="14sp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/editSearchButton"
+        style="@style/SPSecondaryButton"
+        android:minHeight="48dp"
+        android:textAllCaps="false"
+        android:text="Edit search or radius" />
+
+    <TextView
+        android:id="@+id/resultsEmpty"
+        style="@style/SPBody"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Try a larger radius, a suggested category, or a different area. A business may be missing from the map data."
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/placeResultsList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="12dp"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:listSelector="@android:color/transparent" />
+
+    <TextView
+        style="@style/SPBody"
+        android:textSize="12sp"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:text="Geoapify: https://www.geoapify.com\n© OpenStreetMap: https://www.openstreetmap.org/copyright" />
+
+</LinearLayout>
