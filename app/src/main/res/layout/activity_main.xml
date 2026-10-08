@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,33 +9,70 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/homePanel"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="20dp">
 
         <TextView
-            style="@style/SPHeading"
-            android:text="Gather"
-            android:textSize="32sp" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif"
+            android:text="gather."
+            android:textColor="@color/sp_text"
+            android:textSize="28sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/legacyHomeButton"
+            style="@style/GatherSecondaryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="Home"
+            app:icon="@drawable/ic_home"
+            app:iconTint="@color/sp_primary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/homePanel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ON-DEVICE PLANS"
+            android:textColor="@color/sp_primary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Your plans"
+            android:textColor="@color/sp_text"
+            android:textSize="22sp" />
 
         <TextView
             style="@style/SPBody"
-            android:layout_marginTop="6dp"
-            android:text="Find a place. Make a plan." />
+            android:layout_marginTop="4dp"
+            android:text="Places and itineraries saved on this device." />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/newButton"
-            style="@style/SPPrimaryButton"
-            android:layout_marginTop="24dp"
-            android:text="@string/hp_new_hangout" />
-
-        <TextView
-            style="@style/SPHeading"
-            android:layout_marginTop="24dp"
-            android:text="@string/sp_saved_plans"
-            android:textSize="21sp" />
+            style="@style/GatherPrimaryButton"
+            android:layout_marginTop="18dp"
+            android:text="New on-device plan" />
 
         <TextView
             android:id="@+id/statusText"
@@ -48,17 +86,19 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
+            android:clipToPadding="false"
             android:divider="@android:color/transparent"
             android:dividerHeight="12dp"
-            android:listSelector="@android:color/transparent" />
-
+            android:listSelector="@android:color/transparent"
+            android:paddingBottom="12dp" />
     </LinearLayout>
 
     <ScrollView
         android:id="@+id/formPanel"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:fillViewport="true"
         android:visibility="gone">
 
@@ -66,12 +106,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="20dp">
 
             <TextView
                 android:id="@+id/formHeading"
                 style="@style/SPHeading"
-                android:text="@string/hp_new_hangout" />
+                android:text="@string/hp_new_hangout"
+                android:textStyle="normal" />
 
             <TextView
                 style="@style/SPBody"
@@ -113,9 +154,9 @@
                     android:maxLength="200"
                     android:maxLines="2" />
 
-                <androidx.appcompat.widget.AppCompatButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/findPlacesButton"
-                    style="@style/SPPrimaryButton"
+                    style="@style/GatherPrimaryButton"
                     android:layout_marginTop="12dp"
                     android:text="Find a place" />
 
@@ -145,9 +186,9 @@
                     android:maxLength="100"
                     android:maxLines="1" />
 
-                <androidx.appcompat.widget.AppCompatButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/chooseTimeButton"
-                    style="@style/SPSecondaryButton"
+                    style="@style/GatherSecondaryButton"
                     android:layout_marginTop="8dp"
                     android:text="@string/sp_choose_time" />
 
@@ -172,22 +213,18 @@
                     android:linksClickable="true"
                     android:textSize="12sp"
                     android:text="Powered by Geoapify: https://www.geoapify.com\n© OpenStreetMap contributors: https://www.openstreetmap.org/copyright" />
-
             </LinearLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveButton"
-                style="@style/SPPrimaryButton"
+                style="@style/GatherPrimaryButton"
                 android:layout_marginTop="20dp"
-                android:text="Save hangout and places" />
+                android:text="Save plan" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/cancelButton"
-                style="@style/SPSecondaryButton"
+                style="@style/GatherSecondaryButton"
                 android:text="@string/hp_cancel" />
-
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>

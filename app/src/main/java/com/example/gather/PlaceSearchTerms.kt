@@ -19,6 +19,241 @@ object PlaceSearchTerms {
 
     private val groups = listOf(
         Group(
+            "Brunch",
+            "catering.cafe,catering.restaurant",
+            listOf("brunch", "breakfast", "breakfast place")
+        ),
+        Group(
+            "Japanese food",
+            "catering.restaurant.japanese",
+            listOf("japanese", "japanese restaurant")
+        ),
+        Group(
+            "Korean food",
+            "catering.restaurant.korean",
+            listOf("korean", "korean restaurant")
+        ),
+        Group(
+            "Thai food",
+            "catering.restaurant.thai",
+            listOf("thai", "thai restaurant")
+        ),
+        Group(
+            "Vietnamese food",
+            "catering.restaurant.vietnamese",
+            listOf("vietnamese", "vietnamese restaurant")
+        ),
+        Group(
+            "Greek food",
+            "catering.restaurant.greek",
+            listOf("greek", "greek restaurant")
+        ),
+        Group(
+            "Seafood",
+            "catering.restaurant.seafood",
+            listOf("seafood restaurant")
+        ),
+        Group(
+            "Steakhouses",
+            "catering.restaurant.steak_house",
+            listOf("steakhouse", "steak house")
+        ),
+        Group(
+            "Food courts",
+            "catering.food_court",
+            listOf("food court")
+        ),
+        Group(
+            "Bakeries",
+            "commercial.food_and_drink.bakery",
+            listOf("bakery", "bakeshop", "bake shop")
+        ),
+        Group(
+            "Donut shops",
+            "catering.cafe.donut",
+            listOf("donut", "donuts", "doughnut", "doughnuts")
+        ),
+        Group(
+            "Tea shops",
+            "catering.cafe.tea",
+            listOf("tea", "tea shop", "tea house")
+        ),
+        Group(
+            "Dessert shops",
+            "catering.cafe.dessert",
+            listOf("dessert", "desserts", "dessert shop")
+        ),
+        Group(
+            "Bars and pubs",
+            "catering.bar,catering.pub,catering.taproom",
+            listOf("bar", "bars", "pub", "pubs", "taproom", "cocktail bar")
+        ),
+        Group(
+            "Beer gardens",
+            "catering.biergarten",
+            listOf("beer garden", "biergarten")
+        ),
+        Group(
+            "Gardens",
+            "leisure.park.garden",
+            listOf("garden", "botanical garden")
+        ),
+        Group(
+            "Nature reserves",
+            "leisure.park.nature_reserve",
+            listOf("nature reserve", "nature preserve")
+        ),
+        Group(
+            "Beaches",
+            "beach",
+            listOf("beach", "beachfront")
+        ),
+        Group(
+            "Scenic viewpoints",
+            "tourism.attraction.viewpoint",
+            listOf("viewpoint", "scenic overlook", "lookout")
+        ),
+        Group(
+            "Tourist attractions",
+            "tourism.attraction",
+            listOf("attraction", "sightseeing", "tourist attraction")
+        ),
+        Group(
+            "Historic sights",
+            "tourism.sights",
+            listOf("historic site", "landmark", "monument")
+        ),
+        Group(
+            "Campgrounds",
+            "camping.camp_site",
+            listOf("campground", "camping", "camp site", "campsite")
+        ),
+        Group(
+            "Escape rooms",
+            "entertainment.escape_game",
+            listOf("escape room", "escape game")
+        ),
+        Group(
+            "Mini golf",
+            "entertainment.miniature_golf",
+            listOf("miniature golf", "putt putt")
+        ),
+        Group(
+            "Amusement parks",
+            "entertainment.theme_park",
+            listOf("amusement park", "theme park")
+        ),
+        Group(
+            "Water parks",
+            "entertainment.water_park",
+            listOf("water park")
+        ),
+        Group(
+            "Trampoline parks",
+            "entertainment.activity_park.trampoline",
+            listOf("trampoline park", "trampoline")
+        ),
+        Group(
+            "Climbing parks",
+            "entertainment.activity_park.climbing",
+            listOf("climbing park", "climbing")
+        ),
+        Group(
+            "Planetariums",
+            "entertainment.planetarium",
+            listOf("planetarium")
+        ),
+        Group(
+            "Nightclubs",
+            "adult.nightclub",
+            listOf("nightclub", "night club", "dance club")
+        ),
+        Group(
+            "Event venues",
+            "activity.events_venue",
+            listOf("event venue", "event space", "venue")
+        ),
+        Group(
+            "Community centers",
+            "activity.community_center",
+            listOf("community center", "community centre")
+        ),
+        Group(
+            "Gyms",
+            "sport.fitness",
+            listOf("gym", "fitness center", "fitness centre", "workout")
+        ),
+        Group(
+            "Swimming pools",
+            "sport.swimming_pool",
+            listOf("swimming pool", "pool", "public pool")
+        ),
+        Group(
+            "Ice rinks",
+            "sport.ice_rink",
+            listOf("ice rink", "ice skating", "skating rink")
+        ),
+        Group(
+            "Skate parks",
+            "sport.skateboard",
+            listOf("skate park", "skatepark", "skateboarding")
+        ),
+        Group(
+            "Golf courses",
+            "sport.golf_course",
+            listOf("golf", "golf course")
+        ),
+        Group(
+            "Sports centers",
+            "sport.sports_centre",
+            listOf("sports center", "sports centre", "recreation center")
+        ),
+        Group(
+            "Stadiums",
+            "sport.stadium",
+            listOf("stadium", "arena")
+        ),
+        Group(
+            "Spas",
+            "leisure.spa,service.beauty.spa",
+            listOf("spa", "day spa")
+        ),
+        Group(
+            "Clothing stores",
+            "commercial.clothing",
+            listOf("clothing store", "clothes shop", "fashion store")
+        ),
+        Group(
+            "Convenience stores",
+            "commercial.convenience",
+            listOf("convenience store", "corner store")
+        ),
+        Group(
+            "Florists",
+            "commercial.florist",
+            listOf("florist", "flower shop")
+        ),
+        Group(
+            "Pet stores",
+            "commercial.pet",
+            listOf("pet store", "pet shop")
+        ),
+        Group(
+            "Toy stores",
+            "commercial.toy_and_game",
+            listOf("toy store", "game store")
+        ),
+        Group(
+            "Libraries",
+            "education.library",
+            listOf("library", "public library")
+        ),
+        Group(
+            "Hotels",
+            "accommodation.hotel",
+            listOf("hotel", "lodging")
+        ),
+        Group(
             "Coffee shops",
             "catering.cafe",
             listOf(
@@ -238,6 +473,8 @@ object PlaceSearchTerms {
                 "bbq", "barbecue", "barbeque"
             )
         )
+
+
     )
 
     val suggestions: List<String> = groups
@@ -278,7 +515,8 @@ object PlaceSearchTerms {
         } else {
             Match(
                 categories =
-                    "catering,commercial,entertainment,leisure,tourism,sport",
+                    "accommodation,activity,adult,beach,camping,catering," +
+                            "commercial,education,entertainment,leisure,service,sport,tourism",
                 businessName = cleaned
             )
         }

@@ -71,17 +71,17 @@
             android:layout_height="52dp"
             android:spinnerMode="dropdown" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/searchAreaButton"
-            style="@style/SPPrimaryButton"
+            style="@style/GatherPrimaryButton"
             android:layout_marginTop="16dp"
             android:minHeight="48dp"
             android:textAllCaps="false"
             android:text="Search this area" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/useDeviceLocationButton"
-            style="@style/SPSecondaryButton"
+            style="@style/GatherSecondaryButton"
             android:minHeight="48dp"
             android:textAllCaps="false"
             android:text="Use my location instead" />

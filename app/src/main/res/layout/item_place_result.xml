@@ -27,9 +27,9 @@
         android:textSize="15sp"
         android:lineSpacingExtra="3dp" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/selectPlaceButton"
-        style="@style/SPPrimaryButton"
+        style="@style/GatherPrimaryButton"
         android:layout_marginTop="12dp"
         android:minHeight="48dp"
         android:textAllCaps="false"

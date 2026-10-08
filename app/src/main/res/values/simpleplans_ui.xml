@@ -1,38 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- App colors -->
-    <color name="sp_background">#F4F7FC</color>
+
+    <color name="sp_background">#F4F8F7</color>
     <color name="sp_surface">#FFFFFF</color>
-    <color name="sp_primary">#315DCC</color>
-    <color name="sp_primary_light">#E8EEFF</color>
-    <color name="sp_text">#17243D</color>
-    <color name="sp_secondary_text">#526078</color>
-    <color name="sp_border">#CBD5E5</color>
-
-    <!-- A consistent light theme for this first version -->
-    <style
-        name="Theme.Gather."
-        parent="Theme.AppCompat.Light.NoActionBar">
-
-        <item name="colorPrimary">@color/sp_primary</item>
-        <item name="colorPrimaryDark">@color/sp_primary</item>
-        <item name="colorAccent">@color/sp_primary</item>
-
-        <item name="android:windowBackground">@color/sp_background</item>
-        <item name="android:colorBackground">@color/sp_background</item>
-        <item name="android:textColorPrimary">@color/sp_text</item>
-        <item name="android:textColorSecondary">@color/sp_secondary_text</item>
-        <item name="android:fontFamily">sans</item>
-        <item name="android:windowLightStatusBar">true</item>
-    </style>
+    <color name="sp_primary">#176C5B</color>
+    <color name="sp_primary_light">#E6F3EF</color>
+    <color name="sp_accent">#72E2BC</color>
+    <color name="sp_text">#132B2D</color>
+    <color name="sp_secondary_text">#536C6B</color>
+    <color name="sp_border">#D7E6E1</color>
 
     <style name="SPHeading">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/sp_text</item>
         <item name="android:textSize">28sp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/space_grotesk_bold</item>
+        <item name="android:fontFamily">@font/space_grotesk_bold</item>
     </style>
 
     <style name="SPBody">
@@ -41,6 +26,8 @@
         <item name="android:textColor">@color/sp_secondary_text</item>
         <item name="android:textSize">15sp</item>
         <item name="android:lineSpacingExtra">3dp</item>
+        <item name="fontFamily">@font/space_grotesk_regular</item>
+        <item name="android:fontFamily">@font/space_grotesk_regular</item>
     </style>
 
     <style name="SPLabel">
@@ -50,7 +37,8 @@
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:textColor">@color/sp_text</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/space_grotesk_medium</item>
+        <item name="android:fontFamily">@font/space_grotesk_medium</item>
     </style>
 
     <style name="SPInput">
@@ -64,20 +52,24 @@
         <item name="android:textColor">@color/sp_text</item>
         <item name="android:textColorHint">@color/sp_secondary_text</item>
         <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/space_grotesk_regular</item>
+        <item name="android:fontFamily">@font/space_grotesk_regular</item>
     </style>
 
-    <style name="SPPrimaryButton" parent="Widget.AppCompat.Button">
+    <style name="GatherPrimaryButton" parent="Widget.MaterialComponents.Button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">52dp</item>
         <item name="backgroundTint">@color/sp_primary</item>
+        <item name="cornerRadius">14dp</item>
+        <item name="fontFamily">@font/space_grotesk_medium</item>
+        <item name="android:fontFamily">@font/space_grotesk_medium</item>
         <item name="android:textColor">@color/sp_surface</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="SPSecondaryButton" parent="SPPrimaryButton">
+    <style name="GatherSecondaryButton" parent="GatherPrimaryButton">
         <item name="backgroundTint">@color/sp_primary_light</item>
         <item name="android:textColor">@color/sp_primary</item>
     </style>

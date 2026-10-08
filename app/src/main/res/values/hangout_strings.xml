@@ -3,12 +3,12 @@
     <string name="hp_title">SimplePlans</string>
     <string name="hp_subtitle">Make plans. Get together.</string>
 
-    <string name="hp_new_hangout">New hangout</string>
-    <string name="hp_edit_hangout">Edit hangout</string>
-
     <string name="hp_loading">Loading your plans…</string>
-    <string name="hp_empty">No hangouts yet. Create your first plan!</string>
-    <string name="hp_tap_plan">Tap a plan to view, edit, or delete it.</string>
+
+    <string name="hp_new_hangout">New on-device plan</string>
+    <string name="hp_edit_hangout">Edit on-device plan</string>
+    <string name="hp_empty">No plans on this device yet. Create your first plan above.</string>
+    <string name="hp_tap_plan">Tap a plan to open its itinerary or edit it.</string>
 
     <string name="hp_title_label">Hangout name *</string>
     <string name="hp_title_hint">Saturday with friends</string>
@@ -38,4 +38,5 @@
     <string name="hp_delete_question">Delete this hangout?</string>
 
     <string name="hp_database_error">Could not finish the database operation. Please try again.</string>
+
 </resources>

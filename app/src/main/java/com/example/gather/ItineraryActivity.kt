@@ -1,20 +1,20 @@
 package com.example.gather
 
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.Executors
@@ -23,9 +23,9 @@ class ItineraryActivity : AppCompatActivity() {
 
     private lateinit var database: DatabaseHelper
     private lateinit var placeSearchHelper: PlaceSearchHelper
+    private lateinit var stopAdapter: ItineraryStopAdapter
 
-    private val databaseThread =
-        Executors.newSingleThreadExecutor()
+    private val databaseThread = Executors.newSingleThreadExecutor()
 
     private lateinit var addStopButton: Button
     private lateinit var statusText: TextView
@@ -44,20 +44,12 @@ class ItineraryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_itinerary)
 
         val root = findViewById<View>(R.id.itineraryRoot)
-
         ViewCompat.setOnApplyWindowInsetsListener(root) { view, insets ->
-            val safeArea = insets.getInsets(
+            val safe = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars() or
                         WindowInsetsCompat.Type.displayCutout()
             )
-
-            view.setPadding(
-                safeArea.left,
-                safeArea.top,
-                safeArea.right,
-                safeArea.bottom
-            )
-
+            view.setPadding(safe.left, safe.top, safe.right, safe.bottom)
             insets
         }
 
@@ -67,16 +59,14 @@ class ItineraryActivity : AppCompatActivity() {
         if (hangoutId <= 0L) {
             Toast.makeText(
                 this,
-                "Could not open this hangout.",
+                "Could not open this itinerary.",
                 Toast.LENGTH_LONG
             ).show()
-
             finish()
             return
         }
 
         database = DatabaseHelper(applicationContext)
-
         addStopButton = findViewById(R.id.addStopButton)
         statusText = findViewById(R.id.itineraryStatus)
         stopsList = findViewById(R.id.stopsList)
@@ -84,10 +74,13 @@ class ItineraryActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.itineraryTitle).text =
             intent.getStringExtra("hangout_title") ?: "Itinerary"
 
-        findViewById<TextView>(R.id.itineraryCity).text = city
+        findViewById<TextView>(R.id.itineraryCity).text =
+            city.ifBlank { "Plan your stops, times, and order." }
+
+        stopAdapter = ItineraryStopAdapter(this)
+        stopsList.adapter = stopAdapter
 
         placeSearchHelper = PlaceSearchHelper(this) { place ->
-            // Save the API result directly into the stops table.
             changeStops {
                 database.insertStop(hangoutId, place)
             }
@@ -97,22 +90,32 @@ class ItineraryActivity : AppCompatActivity() {
             finish()
         }
 
+        findViewById<Button>(R.id.homeButton).setOnClickListener {
+            startActivity(
+                Intent(this, MainActivity::class.java).addFlags(
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                            Intent.FLAG_ACTIVITY_SINGLE_TOP
+                )
+            )
+            finish()
+        }
+
         addStopButton.setOnClickListener {
             placeSearchHelper.startSearch(city)
         }
 
         stopsList.setOnItemClickListener { _, _, position, _ ->
             if (!busy) {
-                showStopActions(stops[position])
+                stops.getOrNull(position)?.let(::showStopActions)
             }
         }
 
-        // Read saved data. Opening this screen makes no API request.
         changeStops { }
     }
 
-    // Perform a database action, then load the updated itinerary.
     private fun changeStops(action: () -> Unit) {
+        if (busy) return
+
         setBusy(true)
         statusText.text = "Updating itinerary…"
 
@@ -123,85 +126,64 @@ class ItineraryActivity : AppCompatActivity() {
             }
 
             runOnUiThread {
-                if (!isDestroyed && !isFinishing) {
-                    setBusy(false)
-
-                    result.fold(
-                        onSuccess = { savedStops ->
-                            renderStops(savedStops)
-                        },
-                        onFailure = { error ->
-                            Log.e(
-                                "SimplePlans",
-                                "Itinerary operation failed",
-                                error
-                            )
-
-                            statusText.text =
-                                "Could not update the itinerary. Reopen it to retry."
-
-                            Toast.makeText(
-                                this,
-                                "The database operation failed.",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    )
+                if (isDestroyed || isFinishing) {
+                    return@runOnUiThread
                 }
+
+                setBusy(false)
+
+                result.fold(
+                    onSuccess = ::renderStops,
+                    onFailure = { error ->
+                        Log.e(
+                            "Gather",
+                            "Itinerary operation failed",
+                            error
+                        )
+                        statusText.text =
+                            "Could not update the itinerary. Please try again."
+
+                        Toast.makeText(
+                            this,
+                            "The database operation failed.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                )
             }
         }
     }
 
     private fun renderStops(savedStops: List<Stop>) {
         stops = savedStops
-
-        val rows = savedStops.mapIndexed { index, stop ->
-            val time = stop.plannedTime.ifBlank {
-                "Time not set"
-            }
-
-            "${index + 1}. ${stop.name}\n$time\n${stop.address}"
-        }
-
-        stopsList.adapter = ArrayAdapter(
-            this,
-            R.layout.item_hangout,
-            R.id.planText,
-            rows
-        )
+        stopAdapter.submit(savedStops)
 
         statusText.text = if (savedStops.isEmpty()) {
             "No stops yet. Find a place to start your itinerary."
         } else {
-            "Saved on this device. Tap a stop to edit it."
+            val count = savedStops.size
+            "$count ${if (count == 1) "stop" else "stops"} saved on this device · tap a card to change it"
         }
     }
 
     private fun showStopActions(stop: Stop) {
-        val index = stops.indexOfFirst { it.id == stop.id }
-
-        val options = mutableListOf(
-            "Set time",
-            "Clear time"
-        )
-
-        if (index > 0) {
-            options.add("Move up")
+        val index = stops.indexOfFirst {
+            it.id == stop.id
         }
+        if (index < 0) return
 
-        if (index >= 0 && index < stops.lastIndex) {
-            options.add("Move down")
-        }
+        ItineraryActionDialog.show(
+            this,
+            stop,
+            index,
+            stops.size
+        ) { action ->
+            when (action) {
+                ItineraryActionDialog.Action.SET_TIME ->
+                    chooseStopTime(stop)
 
-        options.add("Delete stop")
-
-        AlertDialog.Builder(this)
-            .setTitle(stop.name)
-            .setItems(options.toTypedArray()) { _, selected ->
-                when (options[selected]) {
-                    "Set time" -> chooseStopTime(stop)
-
-                    "Clear time" -> changeStops {
+                ItineraryActionDialog.Action.CLEAR_TIME ->
+                    changeStops {
                         check(
                             database.updateStopTime(
                                 hangoutId,
@@ -211,7 +193,8 @@ class ItineraryActivity : AppCompatActivity() {
                         )
                     }
 
-                    "Move up" -> changeStops {
+                ItineraryActionDialog.Action.MOVE_UP ->
+                    changeStops {
                         database.moveStop(
                             hangoutId,
                             stop.id,
@@ -219,7 +202,8 @@ class ItineraryActivity : AppCompatActivity() {
                         )
                     }
 
-                    "Move down" -> changeStops {
+                ItineraryActionDialog.Action.MOVE_DOWN ->
+                    changeStops {
                         database.moveStop(
                             hangoutId,
                             stop.id,
@@ -227,33 +211,31 @@ class ItineraryActivity : AppCompatActivity() {
                         )
                     }
 
-                    "Delete stop" -> confirmDelete(stop)
-                }
+                ItineraryActionDialog.Action.REMOVE ->
+                    confirmDelete(stop)
             }
-            .setNegativeButton("Close", null)
-            .show()
+        }
     }
 
     private fun chooseStopTime(stop: Stop) {
         val now = Calendar.getInstance()
+        val existing = stop.plannedTime.split(":")
 
-        val existingTime = stop.plannedTime.split(":")
-
-        val hour = existingTime.getOrNull(0)?.toIntOrNull()
+        val hour = existing.getOrNull(0)?.toIntOrNull()
             ?: now.get(Calendar.HOUR_OF_DAY)
 
-        val minute = existingTime.getOrNull(1)?.toIntOrNull()
+        val minute = existing.getOrNull(1)?.toIntOrNull()
             ?: now.get(Calendar.MINUTE)
 
         TimePickerDialog(
             this,
-            { _, selectedHour, selectedMinute ->
-                // Store a consistent 24-hour value, such as 14:30.
+            { _, chosenHour, chosenMinute ->
+                // store a consistent 24-hour value so the device can format it for display.
                 val time = String.format(
                     Locale.US,
                     "%02d:%02d",
-                    selectedHour,
-                    selectedMinute
+                    chosenHour,
+                    chosenMinute
                 )
 
                 changeStops {
@@ -273,11 +255,13 @@ class ItineraryActivity : AppCompatActivity() {
     }
 
     private fun confirmDelete(stop: Stop) {
-        AlertDialog.Builder(this)
-            .setTitle("Remove this stop?")
-            .setMessage(stop.name)
-            .setNegativeButton("Cancel", null)
-            .setPositiveButton("Remove") { _, _ ->
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Remove ${stop.name}?")
+            .setMessage(
+                "This removes the stop and its planned time from this itinerary."
+            )
+            .setNegativeButton("Keep stop", null)
+            .setPositiveButton("Remove stop") { _, _ ->
                 changeStops {
                     check(
                         database.deleteStop(
@@ -308,7 +292,6 @@ class ItineraryActivity : AppCompatActivity() {
         }
 
         databaseThread.shutdown()
-
         super.onDestroy()
     }
 }

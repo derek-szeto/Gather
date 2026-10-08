@@ -1,0 +1,283 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signed() {
+      return request.auth != null;
+    }
+
+    function me() {
+      return request.auth.uid;
+    }
+
+    function profileValid(d, id) {
+      return d.keys().hasAll([
+          'id', 'name', 'status', 'customStatus'
+        ]) &&
+        d.keys().hasOnly([
+          'id', 'name', 'status', 'customStatus'
+        ]) &&
+        d.id == id &&
+        d.name is string &&
+        d.name.size() > 0 &&
+        d.name.size() <= 40 &&
+        d.status in ['available', 'busy', 'custom'] &&
+        d.customStatus is string &&
+        d.customStatus.size() <= 80 &&
+        (d.status != 'custom' || d.customStatus.size() > 0);
+    }
+
+    function coordinateValid(d) {
+      return d.latitude is number &&
+        d.longitude is number &&
+        d.latitude >= -90 &&
+        d.latitude <= 90 &&
+        d.longitude >= -180 &&
+        d.longitude <= 180;
+    }
+
+    function pinValid(d, id) {
+      return d.keys().hasAll([
+          'id', 'authorId', 'title', 'note', 'latitude', 'longitude'
+        ]) &&
+        d.keys().hasOnly([
+          'id', 'authorId', 'title', 'note', 'latitude', 'longitude'
+        ]) &&
+        d.id == id &&
+        d.authorId is string &&
+        d.title is string &&
+        d.title.size() > 0 &&
+        d.title.size() <= 100 &&
+        d.note is string &&
+        d.note.size() <= 2000 &&
+        coordinateValid(d);
+    }
+
+    function acceptedLink(id) {
+      return exists(
+          /databases/$(database)/documents/friendships/$(id)
+        ) &&
+        get(
+          /databases/$(database)/documents/friendships/$(id)
+        ).data.state == 'accepted';
+    }
+
+    function friends(a, b) {
+      return acceptedLink(a + '_' + b) ||
+        acceptedLink(b + '_' + a);
+    }
+
+    function planValid(d, id) {
+      return d.keys().hasAll([
+          'id', 'ownerId', 'title', 'startsAt', 'notes',
+          'memberIds', 'responses', 'cancelled', 'hasPlace',
+          'placeName', 'address', 'latitude', 'longitude',
+          'lastInvited'
+        ]) &&
+        d.keys().hasOnly([
+          'id', 'ownerId', 'title', 'startsAt', 'notes',
+          'memberIds', 'responses', 'cancelled', 'hasPlace',
+          'placeName', 'address', 'latitude', 'longitude',
+          'lastInvited'
+        ]) &&
+        d.id == id &&
+        d.ownerId is string &&
+        d.title is string &&
+        d.title.size() > 0 &&
+        d.title.size() <= 100 &&
+        d.startsAt is int &&
+        d.startsAt > 0 &&
+        d.notes is string &&
+        d.notes.size() <= 2000 &&
+        d.memberIds is list &&
+        d.memberIds.size() > 0 &&
+        d.memberIds.size() <= 30 &&
+        d.memberIds.toSet().size() == d.memberIds.size() &&
+        d.ownerId in d.memberIds &&
+        d.responses is map &&
+        d.cancelled is bool &&
+        d.hasPlace is bool &&
+        d.placeName is string &&
+        d.placeName.size() <= 300 &&
+        d.address is string &&
+        d.address.size() <= 1000 &&
+        d.lastInvited is string &&
+        coordinateValid(d);
+    }
+
+    match /users/{uid} {
+      allow get: if signed();
+      allow list: if false;
+
+      allow create, update: if signed() &&
+        me() == uid &&
+        profileValid(request.resource.data, uid);
+
+      allow delete: if false;
+
+      match /pins/{pinId} {
+        allow read: if signed() && me() == uid;
+
+        allow create, update: if signed() &&
+          me() == uid &&
+          request.resource.data.authorId == uid &&
+          pinValid(request.resource.data, pinId);
+
+        allow delete: if signed() && me() == uid;
+      }
+    }
+
+    match /friendships/{id} {
+      allow get: if signed() &&
+        (
+          !exists(
+            /databases/$(database)/documents/friendships/$(id)
+          ) ||
+          me() in resource.data.members
+        );
+
+      allow list: if signed() &&
+        me() in resource.data.members;
+
+      allow create: if signed() &&
+        request.resource.data.keys().hasAll([
+          'id', 'members', 'sender', 'state'
+        ]) &&
+        request.resource.data.keys().hasOnly([
+          'id', 'members', 'sender', 'state'
+        ]) &&
+        request.resource.data.id == id &&
+        request.resource.data.members is list &&
+        request.resource.data.members.size() == 2 &&
+        request.resource.data.members[0] !=
+          request.resource.data.members[1] &&
+        id == request.resource.data.members[0] + '_' +
+          request.resource.data.members[1] &&
+        me() in request.resource.data.members &&
+        request.resource.data.sender == me() &&
+        request.resource.data.state == 'pending' &&
+        exists(
+          /databases/$(database)/documents/users/$(request.resource.data.members[0])
+        ) &&
+        exists(
+          /databases/$(database)/documents/users/$(request.resource.data.members[1])
+        );
+
+      allow update: if signed() &&
+        me() in resource.data.members &&
+        me() != resource.data.sender &&
+        resource.data.state == 'pending' &&
+        request.resource.data.state == 'accepted' &&
+        request.resource.data.diff(resource.data)
+          .affectedKeys().hasOnly(['state']);
+
+      allow delete: if signed() &&
+        me() in resource.data.members;
+    }
+
+    match /hangouts/{id} {
+      allow get: if signed() &&
+        (
+          !exists(
+            /databases/$(database)/documents/hangouts/$(id)
+          ) ||
+          me() in resource.data.memberIds
+        );
+
+      allow list: if signed() &&
+        me() in resource.data.memberIds;
+
+      allow create: if signed() &&
+        planValid(request.resource.data, id) &&
+        request.resource.data.ownerId == me() &&
+        request.resource.data.memberIds == [me()] &&
+        request.resource.data.responses.keys().hasOnly([me()]) &&
+        request.resource.data.responses[me()] == 'accepted' &&
+        !request.resource.data.cancelled &&
+        request.resource.data.lastInvited == '';
+
+      allow update: if signed() &&
+        planValid(request.resource.data, id) &&
+        (
+          (
+            resource.data.ownerId == me() &&
+            request.resource.data.diff(resource.data)
+              .affectedKeys().hasOnly([
+                'title', 'startsAt', 'notes', 'hasPlace',
+                'placeName', 'address', 'latitude', 'longitude',
+                'cancelled', 'memberIds', 'lastInvited'
+              ]) &&
+            (
+              request.resource.data.memberIds ==
+                resource.data.memberIds ||
+              (
+                request.resource.data.memberIds.toSet() ==
+                  resource.data.memberIds.toSet().union(
+                    [request.resource.data.lastInvited].toSet()
+                  ) &&
+                friends(
+                  me(),
+                  request.resource.data.lastInvited
+                )
+              )
+            )
+          ) ||
+          (
+            me() in resource.data.memberIds &&
+            me() != resource.data.ownerId &&
+            !resource.data.cancelled &&
+            request.resource.data.diff(resource.data)
+              .affectedKeys().hasOnly(['responses']) &&
+            request.resource.data.responses
+              .diff(resource.data.responses)
+              .affectedKeys().hasOnly([me()]) &&
+            request.resource.data.responses[me()]
+              in ['accepted', 'declined']
+          )
+        );
+
+      allow delete: if false;
+
+      match /pins/{pinId} {
+        function parentPlan() {
+          return get(
+            /databases/$(database)/documents/hangouts/$(id)
+          ).data;
+        }
+
+        function contributor() {
+          return signed() &&
+            me() in parentPlan().memberIds &&
+            !parentPlan().cancelled &&
+            (
+              me() == parentPlan().ownerId ||
+              parentPlan().responses.get(me(), 'pending') == 'accepted'
+            );
+        }
+
+        allow read: if signed() &&
+          me() in parentPlan().memberIds;
+
+        allow create: if contributor() &&
+          request.resource.data.authorId == me() &&
+          pinValid(request.resource.data, pinId);
+
+        allow update: if contributor() &&
+          (
+            resource.data.authorId == me() ||
+            parentPlan().ownerId == me()
+          ) &&
+          request.resource.data.authorId ==
+            resource.data.authorId &&
+          pinValid(request.resource.data, pinId);
+
+        allow delete: if contributor() &&
+          (
+            resource.data.authorId == me() ||
+            parentPlan().ownerId == me()
+          );
+      }
+    }
+  }
+}

@@ -24,8 +24,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
+import com.google.android.material.button.MaterialButton
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.core.os.CancellationSignal
@@ -226,7 +227,7 @@ class PlaceSearchHelper(
         val suggestionTag = Any()
         val token = session
 
-        val dialog = AlertDialog.Builder(activity)
+        val dialog = MaterialAlertDialogBuilder(activity)
             .setTitle("Find a place")
             .setView(content)
             .setNegativeButton("Cancel") { _, _ ->
@@ -361,11 +362,14 @@ class PlaceSearchHelper(
                                             longitude = longitude
                                         )
 
-                                        val button = AppCompatButton(
+                                        val button = MaterialButton(
                                             activity
                                         ).apply {
                                             this.text = suggestion.name
                                             isAllCaps = false
+                                            cornerRadius = GatherUi.dp(context, 15)
+                                            backgroundTintList = android.content.res.ColorStateList.valueOf(GatherUi.soft)
+                                            setTextColor(GatherUi.green)
 
                                             gravity =
                                                 android.view.Gravity.START or
@@ -505,13 +509,13 @@ class PlaceSearchHelper(
             }
         }
 
-        content.findViewById<AppCompatButton>(
+        content.findViewById<MaterialButton>(
             R.id.useDeviceLocationButton
         ).setOnClickListener {
             submit(true)
         }
 
-        content.findViewById<AppCompatButton>(
+        content.findViewById<MaterialButton>(
             R.id.searchAreaButton
         ).setOnClickListener {
             submit(false)
@@ -577,7 +581,7 @@ class PlaceSearchHelper(
     ) {
         currentDialog?.dismiss()
 
-        currentDialog = AlertDialog.Builder(activity)
+        currentDialog = MaterialAlertDialogBuilder(activity)
             .setTitle("Choose the search center")
             .setItems(
                 locations.map { it.name }.toTypedArray()
@@ -932,7 +936,7 @@ class PlaceSearchHelper(
                 row.findViewById<TextView>(R.id.placeAddress).text =
                     place.address.removePrefix("${place.name}, ")
 
-                row.findViewById<AppCompatButton>(
+                row.findViewById<MaterialButton>(
                     R.id.selectPlaceButton
                 ).apply {
                     contentDescription =
@@ -951,14 +955,14 @@ class PlaceSearchHelper(
             }
         }
 
-        content.findViewById<AppCompatButton>(
+        content.findViewById<MaterialButton>(
             R.id.editSearchButton
         ).setOnClickListener {
             currentDialog?.dismiss()
             showSearchForm(lastLocationText)
         }
 
-        currentDialog = AlertDialog.Builder(activity)
+        currentDialog = MaterialAlertDialogBuilder(activity)
             .setTitle("Choose a place")
             .setView(content)
             .setNegativeButton("Close") { _, _ ->
@@ -1014,7 +1018,7 @@ class PlaceSearchHelper(
     private fun showLoading(message: String) {
         currentDialog?.dismiss()
 
-        currentDialog = AlertDialog.Builder(activity)
+        currentDialog = MaterialAlertDialogBuilder(activity)
             .setTitle("Place search")
             .setMessage(message)
             .setCancelable(false)
